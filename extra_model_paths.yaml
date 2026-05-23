@@ -1,0 +1,12 @@
+comfyui:
+    base_path: /workspace
+    checkpoints: models/checkpoints
+    loras: models/loras
+    vae: models/vae
+    unet: models/unet
+    text_encoders: models/text_encoders
+    clip: models/text_encoders
+    upscale_models: models/upscale_models
+    controlnet: models/controlnet
+    clip_vision: models/clip_vision
+    embeddings: models/embeddings
