@@ -36,7 +36,8 @@ RUN cd /opt/comfyui/custom_nodes && \
     git clone --depth 1 https://github.com/melMass/comfy_mtb && \
     git clone --depth 1 https://github.com/WASasquatch/was-node-suite-comfyui && \
     git clone --depth 1 https://github.com/adieyal/comfyui-dynamicprompts && \
-    git clone --depth 1 https://github.com/yolain/ComfyUI-Easy-Use
+    git clone --depth 1 https://github.com/yolain/ComfyUI-Easy-Use && \
+    git clone --depth 1 https://github.com/ClownsharkBatwing/RES4LYF
 
 # Custom node requirements
 RUN for req in /opt/comfyui/custom_nodes/*/requirements.txt; do \
