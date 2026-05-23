@@ -90,7 +90,7 @@ jobs:
           platforms: linux/amd64
           push: true
           build-args: |
-            BASE_IMAGE=runpod/pytorch:2.8.0-py3.11-cuda12.8.1-devel-ubuntu22.04
+            BASE_IMAGE=runpod/pytorch:2.8.0-py3.11-cuda12.8.1-cudnn-devel-ubuntu22.04
             TORCH_INDEX_URL=https://download.pytorch.org/whl/cu128
             TORCH_VERSION=2.8.0
             TORCHVISION_VERSION=0.23.0
