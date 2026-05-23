@@ -18,9 +18,19 @@ mkdir -p /workspace/models/{checkpoints,loras/anna_tatsii,vae,unet/flux,text_enc
 mkdir -p /workspace/.cache/huggingface
 
 # Download models on first start if missing
-if [ ! -f /workspace/models/unet/flux/flux-2-klein-9b-fp8.safetensors ]; then
+if [ ! -f /workspace/models/unet/flux/flux-2-klein-9b-fp8.safetensors ] || \
+   [ ! -f /workspace/models/text_encoders/qwen_3_8b_fp8mixed.safetensors ] || \
+   [ ! -f /workspace/models/vae/flux2_vae.safetensors ]; then
     echo "First start — downloading models in background (tail -f /workspace/download.log)"
     bash /opt/comfyui/download_models.sh &
+fi
+
+# Copy bundled workflows to workspace on first start
+WFSRC=/opt/comfyui/custom_nodes/kitty-prompt-builder/workflows
+WFDST=/workspace/user/default/workflows
+mkdir -p "$WFDST"
+if [ -d "$WFSRC" ]; then
+    cp -n "$WFSRC"/*.json "$WFDST"/ 2>/dev/null || true
 fi
 
 # Link output/input/user to workspace volume

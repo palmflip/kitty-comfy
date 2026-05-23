@@ -1,0 +1,622 @@
+{
+  "last_node_id": 13,
+  "last_link_id": 13,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "UNETLoader",
+      "pos": [
+        -1300,
+        0
+      ],
+      "size": {
+        "0": 360,
+        "1": 66
+      },
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "UNETLoader"
+      },
+      "widgets_values": [
+        "flux/flux-2-klein-9b-fp8.safetensors",
+        "fp8_e4m3fn"
+      ],
+      "title": "UNET Klein 9B fp8 (dev)"
+    },
+    {
+      "id": 2,
+      "type": "CLIPLoader",
+      "pos": [
+        -1300,
+        110
+      ],
+      "size": {
+        "0": 360,
+        "1": 82
+      },
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPLoader"
+      },
+      "widgets_values": [
+        "qwen_3_8b_fp8mixed.safetensors",
+        "flux2"
+      ],
+      "title": "CLIP Qwen3 fp8 (flux2)"
+    },
+    {
+      "id": 3,
+      "type": "VAELoader",
+      "pos": [
+        -1300,
+        230
+      ],
+      "size": {
+        "0": 360,
+        "1": 60
+      },
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            10
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "VAELoader"
+      },
+      "widgets_values": [
+        "flux2_vae.safetensors"
+      ],
+      "title": "VAE flux2"
+    },
+    {
+      "id": 4,
+      "type": "Power Lora Loader (rgthree)",
+      "pos": [
+        -880,
+        0
+      ],
+      "size": {
+        "0": 370,
+        "1": 220
+      },
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 1,
+          "slot_index": 0
+        },
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 2,
+          "slot_index": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            4,
+            5
+          ],
+          "slot_index": 1
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        null,
+        {
+          "type": "PowerLoraLoaderHeaderWidget"
+        },
+        {
+          "on": true,
+          "lora": "anna_tatsii/anna_tatsii_klein9b_v4_5000.safetensors",
+          "strength": 1.0,
+          "strengthTwo": null
+        },
+        null,
+        ""
+      ],
+      "title": "Power Lora Loader"
+    },
+    {
+      "id": 5,
+      "type": "EmptyFlux2LatentImage",
+      "pos": [
+        -880,
+        260
+      ],
+      "size": {
+        "0": 280,
+        "1": 110
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            9
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "EmptyFlux2LatentImage"
+      },
+      "widgets_values": [
+        768,
+        1360,
+        1
+      ],
+      "title": "Empty Flux2 Latent 768x1360"
+    },
+    {
+      "id": 13,
+      "type": "KittyPromptBuilder",
+      "pos": [
+        -1300,
+        380
+      ],
+      "size": {
+        "0": 480,
+        "1": 440
+      },
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "links": [
+            13
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        "a tatsii woman, dark wavy hair loose, standing with arms relaxed at her sides, expression calm and self-possessed\na tatsii woman, sitting cross-legged, hair falling over one shoulder, hands resting lightly in her lap\na tatsii woman, leaning forward on her elbows, dark eyes intent, wavy hair framing her face\na tatsii woman, crouching low, weight balanced on her heels, hair tumbling forward\na tatsii woman, standing with one hand on her hip, chin lifted, wavy dark hair swept back\na tatsii woman, perched on the edge of a surface, legs dangling, expression quietly amused\na tatsii woman, lying on her stomach, chin propped on both hands, dark hair fanned around her\na tatsii woman, kneeling upright, posture straight, wavy hair loose down her back\na tatsii woman, standing with arms crossed loosely, dark wavy hair slightly wind-tossed\na tatsii woman, sitting sideways, one knee drawn up, looking slightly to the side\na tatsii woman, stretching her arms overhead, wavy dark hair shifting with the movement\na tatsii woman, leaning against something with one shoulder, expression wry and knowing\na tatsii woman, reclining on her back, hair spread out, one arm folded under her head\na tatsii woman, sitting on her heels, hands folded in her lap, expression soft and pensive\na tatsii woman, standing feet apart, arms loosely open, dark wavy hair voluminous and free\na tatsii woman, bent slightly at the waist, hands on her knees, hair falling forward in waves\na tatsii woman, lying on her side, one hand tucked under her cheek, expression languid\na tatsii woman, standing with one foot slightly forward, weight shifted, relaxed confidence in her posture\na tatsii woman, seated with legs stretched out in front, leaning back on both palms\na tatsii woman, crouching with arms wrapped around her knees, dark hair coiling over her shoulders\na tatsii woman, tilting her head to one side, wavy hair sliding off her shoulder\na tatsii woman, standing tall, chin level, dark eyes steady, hair resting thick on her back\na tatsii woman, kneeling with one knee raised, elbow on that knee, chin resting on her fist\na tatsii woman, sitting with legs folded to one side, posture easy and unhurried\na tatsii woman, twisting at the torso, dark wavy hair fanning with the motion\na tatsii woman, lying on her back with one arm stretched above her head, expression dreamy\na tatsii woman, leaning back in a seat, one ankle crossed over the other knee, relaxed\na tatsii woman, standing with fingers loosely interlaced in front of her, expression composed\na tatsii woman, stooping to pick something up, wavy dark hair cascading forward\na tatsii woman, seated on the floor, back against her knees, arms wrapped around her legs\na tatsii woman, standing on the balls of her feet, chin raised, dark wavy hair buoyant\na tatsii woman, sitting up straight with hands clasped on her lap, expression attentive\na tatsii woman, reclining against a surface, one leg bent, the other stretched, posture effortless\na tatsii woman, half-kneeling, one hand flat on the ground, dark hair grazing the floor\na tatsii woman, leaning back with arms behind her, fingers splayed against a surface, head tipped back slightly\na tatsii woman, standing with one arm raised and elbow bent, touching the back of her neck\na tatsii woman, curled on her side, knees drawn up, wavy hair tucked around her face\na tatsii woman, perched with ankles crossed and hands braced beside her hips, posture light\na tatsii woman, sitting upright with one hand brushing hair from her face\na tatsii woman, standing with shoulders slightly rolled forward, expression introspective and still\na tatsii woman, crouching with one knee down, arms loosely dangling, dark wavy hair heavy\na tatsii woman, lying face-up with both arms spread wide, hair fanned across the surface beneath her\na tatsii woman, seated with one leg folded under her, elbow on the raised knee, chin in hand\na tatsii woman, standing with her weight on one leg, opposite hip relaxed, arms loose\na tatsii woman, kneeling with both hands pressed to the ground, wavy dark hair curtaining her face\na tatsii woman, sitting with her back straight and hands on her thighs, expression direct and composed\na tatsii woman, mid-turn on her feet, wavy hair sweeping with momentum, posture dynamic\na tatsii woman, reclining fully, one arm draped across her midsection, eyes half-lidded\na tatsii woman, standing with both hands raised to gather her wavy dark hair loosely\na tatsii woman, seated on her knees, hands in her lap, dark eyes soft, expression unhurried",
+        "reading a worn paperback in a crowded cafe\nstirring coffee absently while staring out a rain-streaked window\npressing her palm flat against cold glass\nscrolling through old messages she keeps meaning to delete\nfolding a paper crane from a receipt\nbiting the end of a pen while thinking\npulling a thread loose from her sleeve\nwatching someone across the room without meaning to\nwriting in the margins of a borrowed book\nholding a lit match until it almost burns her fingers\nbraiding a friendship bracelet while listening to music\ntyping fast on a laptop she keeps glancing away from\npressing earbuds in deeper to block out noise\nsketching something quick on a napkin\nwaiting for a train that is already late\ncounting coins in her palm\nfeeding pigeons from a paper bag\ntrying on earrings in a shop mirror\nlacing up boots while sitting on a low wall\ntucking a note under someone else's door\nrolling up a map that won't stay flat\npressing flowers between the pages of a journal\nhumming along to a song no one else can hear\nadjusting a camera strap before lifting it\nblowing on soup that's still too hot\npeeling the label off a glass bottle\nchasing a receipt the wind just caught\nunlocking a bicycle outside a bookshop\nrereading the same line of a letter\nreaching up to grab something just out of reach\npracticing a word in another language under her breath\nlaying out tarot cards slowly on a low table\nwatching a candle burn down in a dark room\nplaying the same guitar chord until it sounds right\nsigning her name at the bottom of a long form\narguing quietly on the phone in a hallway\nthreading a needle in poor light\nwrapping something fragile in old newspaper\nsitting cross-legged on the floor sorting photographs\npressing a stamp carefully onto an envelope\npausing mid-sentence to find the right word\nwatching a spider repair its web between two chairs\nlosing a chess game she is still pretending to consider\npeeling wax from a finished candle with her thumbnail\nwhispering something to a potted plant\neating cherries and dropping the pits one by one\nfixing a hem with safety pins instead of thread\ntracing a route on a paper map with her finger\ntasting wine she has not decided she likes yet\nstepping off a bus into an unfamiliar street",
+        "editorial fashion photography, restrained and architectural, with a quiet-luxury feel\n1970s analog film aesthetic, slightly grainy with warm faded colors and a documentary mood\nhigh-contrast modern cinematography, desaturated with deep shadows and a tense moody atmosphere\nScandinavian minimalist photography, clean negative space, neutral palette, precise\nwet-plate collodion aesthetic, sepia-toned and ethereal with vignette edges\nJapanese wabi-sabi photography, spare and asymmetric with a reverence for imperfection\nneon-soaked urban noir, rain-slicked surfaces and the moody palette of 1980s cinema\nDust Bowl documentary photography, gritty and compassionate in cool monochrome\nhigh-key commercial beauty photography, pristine whites and aspirational gloss\nautumnal French New Wave cinematography, natural light and a bittersweet intimate quality\nluxury watchmaking catalog aesthetic, obsessive macro precision and cool metallic depth\nraw street photography, candid and unposed with the grain of 35mm pushed film\ngolden-age Hollywood glamour photography, dramatic key light and velvety black shadows\nimmersive environmental portraiture in the style of New Color photography, deadpan and sharp\n1990s alternative music press photography, bleached and overexposed with a raw urgency\nluxe travel editorial, warm film tones and a languid sense of effortless sophistication\ncold conceptual art photography, detached and systematic with white-cube austerity\nanalog instant-print aesthetic, faded border and the raw emotional charge of a Polaroid\nsparse haiku-like photographic realism, one gesture, open space, and quiet attention\nsun-bleached Mediterranean documentary, bleached whites and terracotta warmth under harsh noon\ndreamlike pictorialist soft-focus, diffused light and a melancholic romantic atmosphere\nbrutalist architectural photography, severe geometry and raw texture in cold grey tones",
+        "a Tokyo convenience store at midnight, shelves of neatly stacked onigiri and canned drinks behind, fluorescent light spilling across a linoleum floor\na Moroccan riad courtyard in midday heat, terracotta tiles underfoot, a central fountain of carved stone, potted citrus trees along the whitewashed walls\na Brooklyn rooftop in late summer, water towers and brick chimneys receding into the hazy skyline, a weathered wooden deck chair to the left\na Scandinavian kitchen at dawn, pale birch cabinets and a soapstone counter, a ceramic pour-over and a linen dish towel draped over the sink edge\na secondhand bookshop in Edinburgh, floor-to-ceiling shelves of paperbacks, a rolling library ladder, scattered receipts on a worn oak table\na sun-bleached Greek island terrace overlooking the Aegean, whitewashed stone walls, blue-painted wooden shutters, a clay pot of dried herbs just out of frame\na Paris atelier at dusk, bolts of silk and raw linen stacked against exposed stone walls, a dressmaker's form behind, chalk marks on the parquet floor\na damp autumn forest in the Pacific Northwest, moss-covered basalt boulders, ferns pressing in from every side, fog threading between Douglas fir trunks\na Sao Paulo market at noon, stalls of tropical fruit spilling across wooden tables, hand-lettered cardboard signs overhead, cobblestones slick from a recent rain\na New York loft studio, raw concrete pillars, oversized factory windows with southern exposure, a drafting table buried under rolled blueprints to the right\na Kyoto temple garden in early spring, raked gravel surrounding a central mossy stone, a wooden veranda just behind, cherry blossoms beginning to open overhead\na Copenhagen cafe in November, steamed-up windows, a small round table with a matte-glazed cup and a folded newspaper, bentwood chairs all around\nan Athens flea market on a Sunday morning, bronze candlesticks and cracked ceramic plates spread across a cloth-covered trestle, a Byzantine icon leaning behind\na Dublin pub interior at midday, dark mahogany bar top, brass tap handles, a glass of amber ale and a folded racing form on the counter\na Montana meadow in midsummer, tall grass bending in the wind, a split-rail fence receding into the treeline, the Beartooth Range faint in the background\na midcentury Palm Springs living room, low-slung rattan furniture, a terrazzo floor, a ceramic lamp and a stack of art books on the side table\na Lisbon tram car in the afternoon, worn yellow leather seats, varnished wooden handrails, tiled buildings sliding past the scratched window glass\na Vietnamese pho shop before opening, stacked plastic stools, broth simmering in a massive steel pot behind, bundles of rice noodles on a prep table\na Berlin Neukoelln apartment in winter, bare plaster walls, a radiator hissing beneath a single-pane window, a pine table with an empty espresso cup\na Havana courtyard in afternoon heat, crumbling ochre stucco walls, a rusted wrought-iron chair beneath a mango tree, laundry on a line overhead\na Finnish lakeside sauna in July, rough-hewn pine benches, a bucket of water and a birch whisk on the floor, the still lake visible through the open door\na London brutalist housing estate at dusk, raw concrete walkways, a rusted bicycle chained to a railing, the city lights beginning to appear in the distance\na Nairobi flower market at dawn, buckets of protea and Bird-of-Paradise crowding the narrow aisle, wet concrete underfoot, corrugated metal walls behind\na Buenos Aires milonga on a Saturday night, lacquered parquet floor, small tables draped in white linen around the edges, a bandoneon case open on a chair\na Seoul banchan restaurant interior, white-tiled walls, small ceramic dishes of kimchi and pickled vegetables lined across a wooden table, chopstick rests beside each\na Sicilian fishing village at sunrise, coiled ropes and wooden crates stacked on a salt-bleached dock, painted fishing boats bobbing just behind\na Sydney beach at low tide in autumn, wet sand strewn with kelp, a lifeguard tower far behind, low surf breaking softly in the background\na Portland coffee roastery, burlap sacks of green beans stacked against a whitewashed brick wall, a steel roasting drum in the background, chaff drifting in the air\na Venetian canal-side in early morning, green water lapping at weathered travertine steps, a gondola moored to a barber-pole post to the left\na Kyrgyz mountain camp in late summer, felt yurt panels behind, a copper kettle on a low wooden table, the high steppe visible through the open door\na Barcelona bodega interior, shelves of dusty wine bottles floor to ceiling, terracotta floor tiles, a marble-topped bar with a small brass tap\na New Orleans shotgun house interior, tin ceiling overhead, jalousie windows open to the street, a rocking chair with a woven cane seat just behind\na Cape Town winelands estate in autumn, a crushed-gravel path between rows of dormant grapevines, a whitewashed Cape Dutch gable in the background\na Chicago diner at 3 a.m., laminate counter in mint green, chrome bar stools, a pie case glowing behind the pass-through to the kitchen\na Tallinn medieval street in winter, snow packed between cobblestones, limestone guild hall walls on both sides, an iron lantern hanging overhead\na Marrakech souk corridor at midday, shafts of light through a cane lattice roof, stacked brassware and patterned kilims lining both sides of the narrow lane\na Tokyo kissaten in afternoon, dark wood paneling, a vintage record player on a corner shelf, ceramic cups and a small glass sugar dispenser on each table\nan Atacama desert at dusk, terracotta earth stretching to a volcanic ridge, a single adobe shelter behind, the sky shifting from orange to deep violet\na Montreal Mile End apartment in autumn, original fir floors, a cast-iron radiator by tall sash windows, stacks of vinyl records on a plywood shelf\na Balinese rice paddy at dawn, tiered emerald terraces receding up a hillside, bamboo irrigation flutes trickling in the background, morning mist across the valley\na Swiss Alpine hut in early spring, rough stone walls, a pine-plank table with a ceramic jug, snow still covering the meadow visible through a small window\na Havana Malecon at dusk, the sea wall crumbling behind, the ocean grey-green beyond, old American cars rolling past on the broad avenue\nan Istanbul Grand Bazaar interior, vaulted stone ceiling, lanterns hanging at intervals, bolts of embroidered fabric stacked against a recessed archway to the right\na remote Iceland beach in autumn, black volcanic sand stretching in both directions, basalt columns rising behind, the Atlantic crashing in the background\nan Oaxacan market courtyard, metate stone and clay comals arranged on low tables, woven palm baskets overhead, a bougainvillea-covered adobe wall behind\na Penang shophouse interior, original encaustic tile floor in geometric patterns, a hand-painted enamel sign leaning against peeling colonial plaster, rattan blinds half-drawn\na rural Tuscany kitchen in August, a rough terracotta crock of dried porcini on a shelf, braided garlic overhead, a pine farmhouse table with scattered flour\nan Amsterdam canal apartment in winter, original timber ceiling beams, a cast-iron stove in the corner, canal boats visible through tall paned windows behind\na Manila jeepney interior, chrome rails and mirrored panels overhead, painted saints along the front fascia, the street a blur of neon through the open back\na Jordanian desert camp at night, hand-knotted wool rugs spread across the sand, a brass tea set on a low cedar table, the Milky Way overhead",
+        "soft overcast daylight from a north-facing window, even and shadowless, rendering cool whites across all surfaces\na bare tungsten bulb hanging at center frame, warm amber pool below, darkness bleeding in from every edge\nharsh midday sun from directly overhead, bleaching highlights and crushing shadows beneath the chin and brow\nfluorescent strip lights on the ceiling, flat and clinical, a faint green cast across skin and walls\nsingle candle held close and below, warm orange light dancing upward, shadows shifting with each flicker\nrim light from behind and above, cold white LED, separating subject from a deep unlit background\nlow-pressure sodium streetlamp from the right, a narrow band of sickly amber against blue-black shadow\ntwo strip softboxes flanking from the sides, warm white, fill nearly matching the key, almost shadowless\nbounced flash off a white ceiling overhead, soft and directionless, flat natural-looking color temperature\nmorning fog light, soft and low from the east, barely directional, pale grey with a faint lavender undertone\npractical desk lamp to the lower left, tungsten warm, casting an upward wash that fades before reaching the ceiling\nblue-hour skylight from above through a skylight, deeply desaturated, cool and still, long soft gradients\nkino flo bank at forty-five degrees from the left, daylight-balanced, smooth soft gradients across the form\na grid-spotted fresnel from high camera right, tight beam, hard-edged shadow angling across to the left\nneon sign off-camera right, saturated magenta, mixing with cooler ambient from the window opposite\nharsh direct flash on-axis, flat and airless, slight blue cast from a bare speedlight at full power\ncanopy of bare incandescent bulbs overhead, warm layered light from multiple directions, shallow falloff\ncar headlights from the front, hard twin beams cutting through, deep shadow behind the subject\npracticals in the background glowing amber while the foreground receives cool blue fill from above\na ringflash mounted on-axis, perfectly even, shadow wrapping around the subject edge all the way around\nmoonlight from high camera left, blue-cool, hard-edged shadow falling sharply to the right, minimal fill\nlarge parabolic softbox overhead and slightly forward, neutral daylight, smooth gradient from crown to chin\nLED panel cold from the right, crossed by warm bounce from a silver reflector left and below\ncampfire below and in front, orange warm light fluctuating, rimming from above with cooler night sky\nfog-filtered sun from behind, a diffuse backlight glow, subject almost silhouetted, light wrapping the edges\na single practical lantern stage right, orange flicker, hard contrast against an otherwise dark space\nhigh-noon industrial skylight above, hard shafts of daylight, dust and scatter in the beam, deep flanking shadow\naquarium glow from the left, blue-green cool light washing the near side, warm room bounce on the far side\nbroad silk diffusion panel above and forward, daylight balanced, even soft light with a subtle downward direction\nsingle hair light from directly behind, pure white LED, strong separation, no other source in the scene\nwarm sunset backlight from camera right, saturated orange, long shadow angling left, slight rim on the shoulder\noverhead grid softbox on a shoot-through, two stops above ambient, neutral, clean downward gradient\nbare flash with a thin grid from forty-five degrees right, tight falloff, warm gel added to balance tungsten ambient\ncool overcast sky from outside a window stage left, soft and directional enough to cast light shadows inward\na practical TV screen off-camera, blue-white flickering light washing the left side of the subject intermittently\nunder-lit from below by a light table or panel, cool white, reversing usual shadow direction up across the face\ndaylight balanced LED panel backlit through a frosted shower door, even and soft, a flat fill from the side\nlow-angle table lamp from the lower right, tungsten warm, light raking upward and catching texture on every surface\nmercury vapor industrial lamp overhead, green-tinted and harsh, hard shadows directly below, minimal ambient\na strip of warm practical Christmas lights behind the subject, low-level orange glow filling the background plane\nsoftbox at head height directly in front, neutral 5500K, controlled and flat, slight fill from the floor bounce\nthree-quarter backlight from upper camera left, hard LED, cool, a sharp highlight line across the far shoulder\novercast winter light through bare branches, dappled and cool, moving slightly as wind shifts the canopy\ncolored practicals in the background, deep red, while the foreground receives a cooler ambient daylight fill\na follow-spot from above and behind, white, tight ellipse, the rest of the frame falling off to black quickly\nearly morning diffuse light from a frosted east window, cool and low-angled, long soft shadows trailing left\nhard sidelight from camera left, a small reflector dish, creating split lighting with a bright side and dark side\na single fire source below and in front, very warm deep orange, upward casting light, no ceiling bounce visible\nbounce light from a large silver reflector at ground level right, cold and hard enough to cast defined shadows upward\ndappled light through a louvered blind from the right, alternating warm bars of sunlight and cool shadow stripes",
+        "tight close-up, eye level, facing the camera directly, shot on 85mm at f/1.4 with very shallow depth of field\nextreme close-up from slightly below, worm's eye angle, subject looking away, 100mm macro at f/2.8\nfull-body shot, low angle, three-quarter view, 35mm at f/8 deep focus on Kodak Ektar 100\nmedium shot, high angle, facing the camera directly, 50mm at f/4 on Fujifilm Superia 400\ncowboy shot, eye level, side profile, shot on 85mm at f/2 with soft background blur\nover-the-shoulder medium shot from behind and slightly above, 50mm at f/2.8 shallow depth of field\nwide shot, overhead top-down angle, subject facing away and small in frame, 24mm deep focus\nhead-and-shoulders portrait, dutch tilt, three-quarter view, 85mm at f/1.8 on medium-format digital\nextreme wide shot, eye level, subject from behind in center of frame, 16mm at f/11 deep focus\nclose-up, high angle, facing the camera directly, shot on 50mm at f/1.8 on Kodak Portra 800\nfull-body shot, eye level, side profile, 35mm at f/5.6 deep focus on Ilford HP5\ncowboy shot, low angle, facing the camera directly, 85mm at f/2.8 shallow depth of field\nmedium shot, worm's eye angle, three-quarter view, 35mm at f/4 on Kodak Portra 400\nhead-and-shoulders portrait, eye level, looking away, 105mm at f/1.4 with extreme shallow depth of field\nwide environmental shot, high angle, subject small and in three-quarter view, 28mm at f/8 deep focus\nextreme close-up, eye level, three-quarter view, shot on 135mm at f/2 with creamy bokeh\nfull-body shot, high angle, facing the camera directly, 24mm at f/7.1 on medium-format digital\nover-the-shoulder close-up from behind, eye level, 85mm at f/1.8 shallow depth of field\nmedium shot, dutch tilt, side profile, 50mm at f/2.8 on Kodak Gold 200\ncowboy shot, high angle looking down, facing away, 35mm at f/5.6 on Fujifilm Pro 400H\ntight head-and-shoulders portrait, low angle, facing the camera directly, 85mm at f/2 on Kodak Portra 400\nwide shot, eye level, subject from behind and slightly to the side, 24mm at f/9 deep focus\nfull-body shot, worm's eye angle, three-quarter view, 35mm at f/4 on CineStill 800T\nclose-up, overhead top-down angle, facing the camera directly, 85mm at f/2.8 shallow depth of field\nmedium shot, eye level, over-the-shoulder from slightly behind, 50mm at f/2 medium-format digital\ncowboy shot, dutch tilt, three-quarter view, 85mm at f/1.8 on Kodak Portra 160\nextreme wide shot, low angle, subject tiny and facing the camera directly, 14mm at f/11 deep focus\nhead-and-shoulders portrait, high angle, looking away, 85mm at f/2.8 on Fujifilm Velvia 50\nfull-body shot, eye level, from behind, 50mm at f/5.6 on Kodak Ektar 100\nmedium shot, eye level, facing the camera directly, 85mm at f/1.4 with shallow depth of field on medium-format digital\nclose-up, low angle, three-quarter view, 100mm at f/2 on Kodak Portra 800\nwide shot, high angle, subject in side profile at frame edge, 28mm at f/8 on CineStill 50D\ncowboy shot, eye level, from behind, 85mm at f/2.8 shallow depth of field\nextreme close-up, dutch tilt, facing the camera directly, 90mm at f/1.4 on medium-format digital\nfull-body shot, high angle, looking away, 35mm at f/6.3 on Kodak Portra 400\nhead-and-shoulders portrait, eye level, side profile, shot on 135mm at f/2 with very shallow depth of field\nmedium shot, low angle, from behind, 50mm at f/4 deep focus on Ilford Delta 400\nover-the-shoulder wide shot, slightly above eye level, subject facing away into the distance, 35mm at f/5.6\ncowboy shot, worm's eye angle, facing the camera directly, 50mm at f/2.8 on Fujifilm Pro 400H\ntight close-up, high angle, three-quarter view, 85mm at f/1.8 on Kodak Portra 160\nextreme wide shot, eye level, subject in side profile at far left of frame, 21mm at f/10 deep focus\nfull-body shot, dutch tilt, three-quarter view, 35mm at f/4 on CineStill 800T\nmedium shot, overhead top-down angle, facing the camera directly, 50mm at f/2.8 medium-format digital\nhead-and-shoulders portrait, low angle, from behind and slightly to the side, 85mm at f/2 shallow depth of field\nclose-up, eye level, looking away, 100mm at f/2.8 on Kodak Portra 400\ncowboy shot, high angle, side profile, 85mm at f/1.8 on medium-format digital\nwide shot, low angle, subject facing the camera directly at center frame, 24mm at f/8 on Kodak Ektar 100\nfull-body shot, eye level, three-quarter view, 50mm at f/4 on Fujifilm Superia 800\nextreme close-up, low angle, side profile, shot on 85mm at f/1.4 with shallow depth of field\nmedium shot, eye level, facing the camera directly, 75mm at f/2.5 on Kodak Portra 400 medium-format",
+        18,
+        42,
+        "fixed"
+      ],
+      "title": "Kitty Prompt Builder"
+    },
+    {
+      "id": 6,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -460,
+        0
+      ],
+      "size": {
+        "0": 480,
+        "1": 150
+      },
+      "flags": {
+        "collapsed": true
+      },
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 4,
+          "slot_index": 0
+        },
+        {
+          "name": "text",
+          "type": "STRING",
+          "link": 13,
+          "widget": {
+            "name": "text"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            6
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [],
+      "title": "CLIPTextEncode positive"
+    },
+    {
+      "id": 7,
+      "type": "CLIPTextEncode",
+      "pos": [
+        -460,
+        260
+      ],
+      "size": {
+        "0": 480,
+        "1": 80
+      },
+      "flags": {
+        "collapsed": true
+      },
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "clip",
+          "type": "CLIP",
+          "link": 5,
+          "slot_index": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            7
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "CLIPTextEncode"
+      },
+      "widgets_values": [
+        ""
+      ],
+      "title": "Negative (Klein ignores)"
+    },
+    {
+      "id": 12,
+      "type": "FluxGuidance",
+      "pos": [
+        70,
+        0
+      ],
+      "size": {
+        "0": 280,
+        "1": 58
+      },
+      "flags": {
+        "collapsed": true
+      },
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "conditioning",
+          "type": "CONDITIONING",
+          "link": 6,
+          "slot_index": 0
+        }
+      ],
+      "outputs": [
+        {
+          "name": "CONDITIONING",
+          "type": "CONDITIONING",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {},
+      "widgets_values": [
+        1.0
+      ],
+      "title": "FluxGuidance 1.0"
+    },
+    {
+      "id": 8,
+      "type": "KSampler",
+      "pos": [
+        400,
+        0
+      ],
+      "size": {
+        "0": 320,
+        "1": 262
+      },
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "model",
+          "type": "MODEL",
+          "link": 3,
+          "slot_index": 0
+        },
+        {
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 11,
+          "slot_index": 1
+        },
+        {
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 7,
+          "slot_index": 2
+        },
+        {
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 9,
+          "slot_index": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            8
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "KSampler"
+      },
+      "widgets_values": [
+        42,
+        "fixed",
+        4,
+        1.0,
+        "res_2s",
+        "beta57",
+        1.0
+      ],
+      "title": "KSampler 4/1.0 res_2s/beta57"
+    },
+    {
+      "id": 9,
+      "type": "VAEDecode",
+      "pos": [
+        770,
+        0
+      ],
+      "size": {
+        "0": 240,
+        "1": 50
+      },
+      "flags": {
+        "collapsed": true
+      },
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "samples",
+          "type": "LATENT",
+          "link": 8,
+          "slot_index": 0
+        },
+        {
+          "name": "vae",
+          "type": "VAE",
+          "link": 10,
+          "slot_index": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {},
+      "widgets_values": [],
+      "title": "VAE Decode"
+    },
+    {
+      "id": 10,
+      "type": "SaveImage",
+      "pos": [
+        1060,
+        0
+      ],
+      "size": {
+        "0": 1020,
+        "1": 963
+      },
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 12,
+          "slot_index": 0
+        }
+      ],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "klein9b_anna"
+      ],
+      "title": "Save"
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      "MODEL"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      1,
+      "CLIP"
+    ],
+    [
+      3,
+      4,
+      0,
+      8,
+      0,
+      "MODEL"
+    ],
+    [
+      4,
+      4,
+      1,
+      6,
+      0,
+      "CLIP"
+    ],
+    [
+      5,
+      4,
+      1,
+      7,
+      0,
+      "CLIP"
+    ],
+    [
+      6,
+      6,
+      0,
+      12,
+      0,
+      "CONDITIONING"
+    ],
+    [
+      7,
+      7,
+      0,
+      8,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      8,
+      8,
+      0,
+      9,
+      0,
+      "LATENT"
+    ],
+    [
+      9,
+      5,
+      0,
+      8,
+      3,
+      "LATENT"
+    ],
+    [
+      10,
+      3,
+      0,
+      9,
+      1,
+      "VAE"
+    ],
+    [
+      11,
+      12,
+      0,
+      8,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      12,
+      9,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      13,
+      13,
+      0,
+      6,
+      1,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {},
+  "version": 0.4
+}
