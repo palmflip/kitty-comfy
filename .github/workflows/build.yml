@@ -43,8 +43,59 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64
           push: true
+          build-args: |
+            BASE_IMAGE=runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
+            TORCH_INDEX_URL=https://download.pytorch.org/whl/cu124
+            TORCH_VERSION=2.4.0
+            TORCHVISION_VERSION=0.19.0
+            TORCHAUDIO_VERSION=2.4.0
           tags: |
             ${{ env.IMAGE }}:cu124
             ${{ env.IMAGE }}:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=cu124
+          cache-to: type=gha,mode=max,scope=cu124
+
+  build-cu128:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          sudo rm -rf /usr/local/share/boost /usr/share/swift
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo rm -rf /usr/local/.ghcup
+          sudo docker image prune -af
+          df -h
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push cu128
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: true
+          build-args: |
+            BASE_IMAGE=runpod/pytorch:2.8.0-py3.11-cuda12.8.1-devel-ubuntu22.04
+            TORCH_INDEX_URL=https://download.pytorch.org/whl/cu128
+            TORCH_VERSION=2.8.0
+            TORCHVISION_VERSION=0.23.0
+            TORCHAUDIO_VERSION=2.8.0
+          tags: |
+            ${{ env.IMAGE }}:cu128
+          cache-from: type=gha,scope=cu128
+          cache-to: type=gha,mode=max,scope=cu128

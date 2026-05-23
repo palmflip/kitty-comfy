@@ -1,4 +1,5 @@
-FROM runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
+ARG BASE_IMAGE=runpod/pytorch:2.4.0-py3.11-cuda12.4.1-devel-ubuntu22.04
+FROM ${BASE_IMAGE}
 
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
@@ -52,9 +53,13 @@ RUN uv pip install --system \
     piexif segment-anything hf_transfer
 
 # Pin torch + transformers LAST — deps re-upgrade them otherwise
+ARG TORCH_INDEX_URL=https://download.pytorch.org/whl/cu124
+ARG TORCH_VERSION=2.4.0
+ARG TORCHVISION_VERSION=0.19.0
+ARG TORCHAUDIO_VERSION=2.4.0
 RUN uv pip install --system \
-    torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 \
-    --index-url https://download.pytorch.org/whl/cu124 && \
+    torch==${TORCH_VERSION} torchvision==${TORCHVISION_VERSION} torchaudio==${TORCHAUDIO_VERSION} \
+    --index-url ${TORCH_INDEX_URL} && \
     uv pip install --system 'transformers==4.46.3'
 
 # kitty-prompt-builder
