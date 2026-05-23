@@ -50,10 +50,11 @@ RUN uv pip install --system \
     scikit-image ultralytics dynamicprompts \
     piexif segment-anything hf_transfer
 
-# Pin torch LAST — custom nodes and extra packages re-upgrade it otherwise
+# Pin torch + transformers LAST — deps re-upgrade them otherwise
 RUN uv pip install --system \
     torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 \
-    --index-url https://download.pytorch.org/whl/cu124
+    --index-url https://download.pytorch.org/whl/cu124 && \
+    uv pip install --system 'transformers==4.46.3'
 
 # kitty-prompt-builder
 COPY custom_nodes/kitty-prompt-builder /opt/comfyui/custom_nodes/kitty-prompt-builder
