@@ -12,7 +12,10 @@ ENV PATH="/root/.local/bin:$PATH"
 
 # ComfyUI
 RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI /opt/comfyui
-RUN cd /opt/comfyui && uv pip install --system -r requirements.txt
+RUN cd /opt/comfyui && uv pip install --system -r requirements.txt && \
+    uv pip install --system \
+      torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 \
+      --index-url https://download.pytorch.org/whl/cu124
 
 # Custom nodes
 ENV GIT_TERMINAL_PROMPT=0
