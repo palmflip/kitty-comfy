@@ -6,16 +6,21 @@ ENV DEBIAN_FRONTEND=noninteractive \
     HUGGINGFACE_HUB_CACHE=/workspace/.cache/huggingface \
     HF_HUB_ENABLE_HF_TRANSFER=1
 
+# SSH server
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server && \
+    mkdir -p /var/run/sshd && \
+    sed -i 's/#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/#PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config && \
+    echo "PubkeyAuthentication yes" >> /etc/ssh/sshd_config && \
+    rm -rf /var/lib/apt/lists/*
+
 # uv
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 ENV PATH="/root/.local/bin:$PATH"
 
 # ComfyUI
 RUN git clone --depth 1 https://github.com/comfyanonymous/ComfyUI /opt/comfyui
-RUN cd /opt/comfyui && uv pip install --system -r requirements.txt && \
-    uv pip install --system \
-      torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 \
-      --index-url https://download.pytorch.org/whl/cu124
+RUN cd /opt/comfyui && uv pip install --system -r requirements.txt
 
 # Custom nodes
 ENV GIT_TERMINAL_PROMPT=0
@@ -44,6 +49,11 @@ RUN uv pip install --system \
     opencv-python-headless numba matplotlib \
     scikit-image ultralytics dynamicprompts \
     piexif segment-anything hf_transfer
+
+# Pin torch LAST — custom nodes and extra packages re-upgrade it otherwise
+RUN uv pip install --system \
+    torch==2.4.0 torchvision==0.19.0 torchaudio==2.4.0 \
+    --index-url https://download.pytorch.org/whl/cu124
 
 # kitty-prompt-builder
 COPY custom_nodes/kitty-prompt-builder /opt/comfyui/custom_nodes/kitty-prompt-builder
