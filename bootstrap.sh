@@ -113,6 +113,7 @@ mkdir -p \
     $M/checkpoints $M/loras/anna_tatsii $M/vae \
     $M/unet/flux $M/text_encoders $M/upscale_models \
     $M/controlnet $M/clip_vision $M/embeddings \
+    $M/ultralytics/bbox $M/ultralytics/segm \
     /workspace/output /workspace/input \
     /workspace/user/default/workflows
 
@@ -151,6 +152,12 @@ dl "$HF/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.saf
    $M/checkpoints/sd_xl_base_1.0.safetensors &
 dl "$HF/Phips/4xRealWebPhoto_v4_dat2/resolve/main/4xRealWebPhoto_v4.pth" \
    $M/upscale_models/4xRealWebPhoto_v4.pth &
+dl "$HF/Bingsu/adetailer/resolve/main/face_yolov8m.pt" \
+   $M/ultralytics/bbox/face_yolov8m.pt &
+dl "$HF/Bingsu/adetailer/resolve/main/face_yolov8n.pt" \
+   $M/ultralytics/bbox/face_yolov8n.pt &
+dl "$HF/Bingsu/adetailer/resolve/main/person_yolov8m-seg.pt" \
+   $M/ultralytics/segm/person_yolov8m-seg.pt &
 wait
 
 # ── LoRA warning ──────────────────────────────────────────────────────────────

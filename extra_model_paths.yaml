@@ -10,3 +10,4 @@ comfyui:
     controlnet: models/controlnet
     clip_vision: models/clip_vision
     embeddings: models/embeddings
+    ultralytics: models/ultralytics
