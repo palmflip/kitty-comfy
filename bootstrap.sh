@@ -12,6 +12,14 @@ export UV_CACHE_DIR=/workspace/.cache/uv
 
 echo "=== kitty-comfy bootstrap $(date) ===" | tee $LOG
 
+# ── SSH (docker-args bypasses RunPod entrypoint, sshd never starts) ──────────
+apt-get install -y openssh-server -qq 2>/dev/null || true
+ssh-keygen -A 2>/dev/null || true
+mkdir -p /root/.ssh && chmod 700 /root/.ssh
+[ -n "$PUBLIC_KEY" ] && echo "$PUBLIC_KEY" > /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys
+service ssh start 2>/dev/null || true
+echo "SSH started" | tee -a $LOG
+
 # ── Detect torch & CUDA ──────────────────────────────────────────────────────
 TORCH_VER=$(python3 -c "import torch; print(torch.__version__.split('+')[0])")
 CUDA_TAG=$(python3 -c "import torch; v=torch.version.cuda or '12.4'; v=v.replace('.',''); print('cu'+v[:3])")
