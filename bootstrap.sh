@@ -85,6 +85,12 @@ if [ ! -d "kitty-prompt-builder" ]; then
          -o kitty-prompt-builder/workflows/klein9b_anna.json
 fi
 
+# ── Impact subpack (UltralyticsDetectorProvider) ─────────────────────────────
+if [ ! -d "$COMFY/custom_nodes/comfyui-impact-subpack/.git" ]; then
+    git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Subpack \
+        $COMFY/custom_nodes/comfyui-impact-subpack 2>&1 | tail -1 | tee -a $LOG
+fi
+
 # ── Custom node requirements ──────────────────────────────────────────────────
 for req in $COMFY/custom_nodes/*/requirements.txt; do
     uv pip install --system -q -r "$req" 2>/dev/null || true
@@ -121,6 +127,9 @@ mkdir -p \
 rm -rf $COMFY/output $COMFY/input $COMFY/user
 ln -sfn /workspace/output $COMFY/output
 ln -sfn /workspace/input  $COMFY/input
+mkdir -p $COMFY/models/ultralytics
+ln -sfn $M/ultralytics/bbox $COMFY/models/ultralytics/bbox
+ln -sfn $M/ultralytics/segm $COMFY/models/ultralytics/segm
 ln -sfn /workspace/user   $COMFY/user
 
 # ── Workflows ─────────────────────────────────────────────────────────────────

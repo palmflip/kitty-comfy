@@ -14,7 +14,9 @@ mkdir -p \
   $M/vae \
   $M/checkpoints \
   $M/loras/anna_tatsii \
-  $M/upscale_models
+  $M/upscale_models \
+  $M/ultralytics/bbox \
+  $M/ultralytics/segm
 
 echo "=== Model download started $(date) ===" | tee -a $LOG
 
@@ -55,6 +57,14 @@ dl "$HF/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.saf
 # ── 4x upscale model ────────────────────────────────────────────────────────
 dl "$HF/Phips/4xRealWebPhoto_v4_dat2/resolve/main/4xRealWebPhoto_v4.pth" \
    $M/upscale_models/4xRealWebPhoto_v4.pth &
+
+# ── YOLO models (FaceDetailer) ───────────────────────────────────────────────
+dl "$HF/Bingsu/adetailer/resolve/main/face_yolov8m.pt" \
+   $M/ultralytics/bbox/face_yolov8m.pt &
+dl "$HF/Bingsu/adetailer/resolve/main/face_yolov8n.pt" \
+   $M/ultralytics/bbox/face_yolov8n.pt &
+dl "$HF/Bingsu/adetailer/resolve/main/person_yolov8m-seg.pt" \
+   $M/ultralytics/segm/person_yolov8m-seg.pt &
 
 wait
 echo "=== Model download finished $(date) ===" | tee -a $LOG

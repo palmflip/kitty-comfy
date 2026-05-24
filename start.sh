@@ -14,7 +14,12 @@ ssh-keygen -A 2>/dev/null || true
 mkdir -p /workspace/user/default/workflows
 mkdir -p /workspace/output
 mkdir -p /workspace/input
-mkdir -p /workspace/models/{checkpoints,loras/anna_tatsii,vae,unet/flux,text_encoders,upscale_models,controlnet,clip_vision,embeddings}
+mkdir -p /workspace/models/{checkpoints,loras/anna_tatsii,vae,unet/flux,text_encoders,upscale_models,controlnet,clip_vision,embeddings,ultralytics/bbox,ultralytics/segm}
+
+# Symlink ultralytics so Impact Subpack finds models
+mkdir -p /opt/comfyui/models/ultralytics
+ln -sfn /workspace/models/ultralytics/bbox /opt/comfyui/models/ultralytics/bbox
+ln -sfn /workspace/models/ultralytics/segm /opt/comfyui/models/ultralytics/segm
 mkdir -p /workspace/.cache/huggingface
 
 # Download models on first start if missing

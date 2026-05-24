@@ -26,6 +26,7 @@ RUN cd /opt/comfyui && uv pip install --system -r requirements.txt
 # Custom nodes
 ENV GIT_TERMINAL_PROMPT=0
 RUN cd /opt/comfyui/custom_nodes && \
+    git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Manager && \
     git clone --depth 1 https://github.com/city96/ComfyUI-GGUF && \
     git clone --depth 1 https://github.com/kijai/ComfyUI-SUPIR && \
     git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Inspire-Pack && \
@@ -34,6 +35,7 @@ RUN cd /opt/comfyui/custom_nodes && \
     git clone --depth 1 https://github.com/rgthree/rgthree-comfy && \
     git clone --depth 1 https://github.com/ssitu/ComfyUI_UltimateSDUpscale && \
     git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Pack && \
+    git clone --depth 1 https://github.com/ltdrdata/ComfyUI-Impact-Subpack && \
     git clone --depth 1 https://github.com/melMass/comfy_mtb && \
     git clone --depth 1 https://github.com/WASasquatch/was-node-suite-comfyui && \
     git clone --depth 1 https://github.com/adieyal/comfyui-dynamicprompts && \
