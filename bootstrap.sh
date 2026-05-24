@@ -49,6 +49,7 @@ mkdir -p $COMFY/custom_nodes
 cd $COMFY/custom_nodes
 
 REPOS=(
+    "https://github.com/ltdrdata/ComfyUI-Manager"
     "https://github.com/city96/ComfyUI-GGUF"
     "https://github.com/kijai/ComfyUI-SUPIR"
     "https://github.com/ltdrdata/ComfyUI-Inspire-Pack"
