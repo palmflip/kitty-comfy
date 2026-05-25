@@ -110,6 +110,7 @@ REPOS=(
     "https://github.com/yolain/ComfyUI-Easy-Use"
     "https://github.com/ClownsharkBatwing/RES4LYF"
     "https://github.com/scraed/LanPaint"
+    "https://github.com/Kosinkadink/ComfyUI-VideoHelperSuite"
 )
 
 for repo in "${REPOS[@]}"; do
