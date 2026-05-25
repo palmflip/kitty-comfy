@@ -32,6 +32,52 @@ fi
 export PATH="/root/.local/bin:$PATH"
 mkdir -p $UV_CACHE_DIR
 
+# ── Model dirs (created early so background downloads can write into them) ───
+mkdir -p \
+    $M/checkpoints $M/loras/anna_tatsii $M/vae \
+    $M/unet/flux $M/text_encoders $M/upscale_models \
+    $M/controlnet $M/clip_vision $M/embeddings \
+    $M/ultralytics/bbox $M/ultralytics/segm \
+    /workspace/output /workspace/input \
+    /workspace/user/default/workflows
+
+# ── dl helper (defined early so we can kick off model downloads in the bg) ──
+HF=https://huggingface.co
+dl() {
+    local url=$1 out=$2
+    [ -f "$out" ] && { echo "SKIP: $(basename $out)" | tee -a $LOG; return; }
+    echo "-> $(basename $out)" | tee -a $LOG
+    curl -L --fail --retry 3 -C - \
+        ${HF_TOKEN:+-H "Authorization: Bearer $HF_TOKEN"} \
+        -o "$out" "$url" >> $LOG 2>&1 \
+        && echo "OK: $(basename $out)" | tee -a $LOG \
+        || echo "FAIL: $(basename $out)" | tee -a $LOG
+}
+
+# ── Kick off model downloads NOW in the background ───────────────────────────
+# Network-bound — runs in parallel with pip/git work below (CPU/disk bound),
+# saving ~5-7 min on cold start where previously model downloads only began
+# after all pip installs + custom node clones finished.
+echo "=== kicking off background model downloads ===" | tee -a $LOG
+dl "$HF/black-forest-labs/FLUX.2-klein-9b-fp8/resolve/main/flux-2-klein-9b-fp8.safetensors" \
+   $M/unet/flux/flux-2-klein-9b-fp8.safetensors &
+dl "$HF/Comfy-Org/vae-text-encorder-for-flux-klein-9b/resolve/main/split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors" \
+   $M/text_encoders/qwen_3_8b_fp8mixed.safetensors &
+dl "$HF/Comfy-Org/vae-text-encorder-for-flux-klein-9b/resolve/main/split_files/vae/flux2-vae.safetensors" \
+   $M/vae/flux2_vae.safetensors &
+dl "$HF/Kijai/SUPIR_pruned/resolve/main/SUPIR-v0Q_fp16.safetensors" \
+   $M/checkpoints/SUPIR-v0Q_fp16.safetensors &
+dl "$HF/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors" \
+   $M/checkpoints/sd_xl_base_1.0.safetensors &
+dl "$HF/Phips/4xRealWebPhoto_v4_dat2/resolve/main/4xRealWebPhoto_v4.pth" \
+   $M/upscale_models/4xRealWebPhoto_v4.pth &
+dl "$HF/Bingsu/adetailer/resolve/main/face_yolov8m.pt" \
+   $M/ultralytics/bbox/face_yolov8m.pt &
+dl "$HF/Bingsu/adetailer/resolve/main/face_yolov8n.pt" \
+   $M/ultralytics/bbox/face_yolov8n.pt &
+dl "$HF/Bingsu/adetailer/resolve/main/person_yolov8m-seg.pt" \
+   $M/ultralytics/segm/person_yolov8m-seg.pt &
+
 # ── Clone or update ComfyUI ──────────────────────────────────────────────────
 if [ ! -d "$COMFY/.git" ]; then
     echo "Cloning ComfyUI..." | tee -a $LOG
@@ -114,15 +160,6 @@ echo "torch pinned: $(python3 -c 'import torch; print(torch.__version__)')" | te
 # ── Config ────────────────────────────────────────────────────────────────────
 curl -sSL $REPO/extra_model_paths.yaml -o $COMFY/extra_model_paths.yaml
 
-# ── Dirs ──────────────────────────────────────────────────────────────────────
-mkdir -p \
-    $M/checkpoints $M/loras/anna_tatsii $M/vae \
-    $M/unet/flux $M/text_encoders $M/upscale_models \
-    $M/controlnet $M/clip_vision $M/embeddings \
-    $M/ultralytics/bbox $M/ultralytics/segm \
-    /workspace/output /workspace/input \
-    /workspace/user/default/workflows
-
 # ── Symlinks ──────────────────────────────────────────────────────────────────
 rm -rf $COMFY/output $COMFY/input $COMFY/user
 ln -sfn /workspace/output $COMFY/output
@@ -136,37 +173,8 @@ ln -sfn /workspace/user   $COMFY/user
 cp -n $COMFY/custom_nodes/kitty-prompt-builder/workflows/*.json \
     /workspace/user/default/workflows/ 2>/dev/null || true
 
-# ── Download models ───────────────────────────────────────────────────────────
-HF=https://huggingface.co
-dl() {
-    local url=$1 out=$2
-    [ -f "$out" ] && { echo "SKIP: $(basename $out)" | tee -a $LOG; return; }
-    echo "-> $(basename $out)" | tee -a $LOG
-    curl -L --fail --retry 3 -C - \
-        ${HF_TOKEN:+-H "Authorization: Bearer $HF_TOKEN"} \
-        -o "$out" "$url" >> $LOG 2>&1 \
-        && echo "OK: $(basename $out)" | tee -a $LOG \
-        || echo "FAIL: $(basename $out)" | tee -a $LOG
-}
-
-dl "$HF/black-forest-labs/FLUX.2-klein-9b-fp8/resolve/main/flux-2-klein-9b-fp8.safetensors" \
-   $M/unet/flux/flux-2-klein-9b-fp8.safetensors &
-dl "$HF/Comfy-Org/vae-text-encorder-for-flux-klein-9b/resolve/main/split_files/text_encoders/qwen_3_8b_fp8mixed.safetensors" \
-   $M/text_encoders/qwen_3_8b_fp8mixed.safetensors &
-dl "$HF/Comfy-Org/vae-text-encorder-for-flux-klein-9b/resolve/main/split_files/vae/flux2-vae.safetensors" \
-   $M/vae/flux2_vae.safetensors &
-dl "$HF/Kijai/SUPIR_pruned/resolve/main/SUPIR-v0Q_fp16.safetensors" \
-   $M/checkpoints/SUPIR-v0Q_fp16.safetensors &
-dl "$HF/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors" \
-   $M/checkpoints/sd_xl_base_1.0.safetensors &
-dl "$HF/Phips/4xRealWebPhoto_v4_dat2/resolve/main/4xRealWebPhoto_v4.pth" \
-   $M/upscale_models/4xRealWebPhoto_v4.pth &
-dl "$HF/Bingsu/adetailer/resolve/main/face_yolov8m.pt" \
-   $M/ultralytics/bbox/face_yolov8m.pt &
-dl "$HF/Bingsu/adetailer/resolve/main/face_yolov8n.pt" \
-   $M/ultralytics/bbox/face_yolov8n.pt &
-dl "$HF/Bingsu/adetailer/resolve/main/person_yolov8m-seg.pt" \
-   $M/ultralytics/segm/person_yolov8m-seg.pt &
+# ── Wait for background model downloads to finish ────────────────────────────
+echo "=== waiting for background model downloads ===" | tee -a $LOG
 wait
 
 # ── LoRA warning ──────────────────────────────────────────────────────────────
